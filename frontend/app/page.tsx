@@ -4,10 +4,13 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import { openDB, IDBPDatabase } from "idb";
 import { Cell } from "@/components/notebook/cell";
 import { Toolbar } from "@/components/notebook/toolbar";
-import { NotebookCell, Notebook, CellContent } from "./types/notebook";
+import { NotebookCell, Notebook, CellContent, ExecutionResponse } from "./types/notebook";
 import { v4 as uuidv4 } from "uuid";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { backendService } from "@/lib/execute";
+import Preview from "@/components/notebook/preview";
+import axios from "axios";
 
 // Database configuration
 const DB_NAME = "NotebookDB";
@@ -26,6 +29,11 @@ const initializeDB = async (): Promise<IDBPDatabase> => {
 };
 
 export default function Home() {
+
+  const [previewUrl , setPreviewUrl] = useState("");
+  const [executing , setExecuting] = useState(false);
+  const frameRef = useRef<HTMLIFrameElement>(null);
+
   const notebookRef = useRef<Notebook>({
     cells: [],
     metadata: {
@@ -204,6 +212,71 @@ export default function Home() {
     URL.revokeObjectURL(url);
   }, []);
 
+
+
+  const executeNotebook = useCallback(async () => {
+    setExecuting(true);
+    const ipynb = {
+      cells: notebookRef.current.cells.map((cell) => {
+        const format: CellContent = {
+          cell_type: cell.type,
+          metadata: {},
+          source: [cell.content],
+        };
+  
+        if (cell.type === "code") {
+          format.outputs = cell.outputs?.map((output) => ({
+            output_type: "stream",
+            text: [output],
+          }));
+          format.execution_count = 0;
+        }
+  
+        return format;
+      }),
+      metadata: notebookRef.current.metadata,
+      nbformat: 4,
+      nbformat_minor: 5,
+    };
+  
+    try {
+      const preview: ExecutionResponse = await backendService(JSON.stringify(ipynb), "testbook");
+      setPreviewUrl(preview.url);
+  
+      // Poll for status
+      const pollStatus = async (url: string) => {
+        try {
+          while (true) {
+            try{
+              const response = await axios.post("/api/success", { previewUrl: url });
+              if (response.status === 200) {
+                break;
+              }
+            }
+            catch(e){
+              // Pass 404 Error
+              await new Promise((resolve) => setTimeout(resolve, 3000)); // 3-second delay
+            }
+          }
+        } catch (error) {
+          console.error("Error while polling status:", error);
+        }
+      };
+  
+      await pollStatus(preview.url);
+      if (frameRef.current) {
+        frameRef.current.src = preview.url;
+      }
+    } catch (error) {
+      console.error("Error during notebook execution:", error);
+    } finally {
+      setExecuting(false); 
+    }
+  }, []);
+  
+
+
+
   return (
     <div className="min-h-screen bg-gray-950 text-gray-100">
       <Toolbar
@@ -211,6 +284,8 @@ export default function Home() {
         onAddMarkdownCell={() => addCell("markdown")}
         onImportNotebook={importNotebook}
         onExportNotebook={exportNotebook}
+        onExecute={executeNotebook}
+        executing={executing}
       />
       <div className="grid grid-cols-2">
         <div className="p-4 overflow-y-auto max-h-[calc(100vh-64px)]">
@@ -258,9 +333,7 @@ export default function Home() {
           </div>
         </div>
         <div className="bg-gray-900 border-l border-gray-700 h-[calc(100vh-74px)] sticky top-[64px]">
-          <div className="h-full flex items-center justify-center text-gray-500">
-            Preview Area
-          </div>
+          <Preview previewUrl={previewUrl} frameRef={frameRef} />
         </div>
       </div>
     </div>

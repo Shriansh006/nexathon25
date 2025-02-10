@@ -51,6 +51,7 @@
     "@types/react-dom": "18.2.7",
     "@uiw/react-codemirror": "^4.21.21",
     "autoprefixer": "10.4.15",
+    "axios": "^1.7.9",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "cmdk": "^1.0.0",
@@ -60,6 +61,7 @@
     "encoding": "^0.1.13",
     "eslint": "8.49.0",
     "eslint-config-next": "13.5.1",
+    "formidable": "^3.5.2",
     "groq-sdk": "^0.15.0",
     "idb": "^8.0.2",
     "input-otp": "^1.2.4",
@@ -81,5 +83,8 @@
     "uuid": "^11.0.5",
     "vaul": "^0.9.9",
     "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/formidable": "^3.4.5"
   }
 }

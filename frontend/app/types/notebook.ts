@@ -1,3 +1,9 @@
+export interface ExecutionResponse {
+  message : string;
+  id : string,
+  url : string
+}
+
 export interface NotebookCell {
   id: string;
   type: 'code' | 'markdown';

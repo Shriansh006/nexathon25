@@ -1,14 +1,17 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Plus, FileJson, Download } from "lucide-react";
+import { Plus, FileJson, Download, CogIcon } from "lucide-react";
 import Image from "next/image";
+import { useEffect, useState } from "react";
 
 interface ToolbarProps {
   onAddCodeCell: () => void;
   onAddMarkdownCell: () => void;
   onImportNotebook: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onExportNotebook: () => void;
+  onExecute: ()=>void;
+  executing: boolean;
 }
 
 export function Toolbar({
@@ -16,7 +19,11 @@ export function Toolbar({
   onAddMarkdownCell,
   onImportNotebook,
   onExportNotebook,
+  onExecute,
+  executing
 }: ToolbarProps) {
+
+
   return (
     <div className="flex items-center gap-2 p-4 border-b border-gray-700 bg-gray-900">
       <div className="flex items-center mr-8">
@@ -32,6 +39,18 @@ export function Toolbar({
         Add Markdown Cell
       </Button>
       <div className="flex-1" />
+
+      <Button
+        variant="secondary"
+        size="sm"
+        onClick={onExecute}
+        className="bg-gray-800 text-green-500 hover:text-white hover:bg-green-600 border-0"
+        disabled={executing}
+      >
+        <CogIcon className={`w-4 h-4 mr-2 ${executing?"animate-spin" : ""}`} />
+        {executing?"Executing":"Execute"}
+      </Button>
+
       <input
         type="file"
         id="notebook-import"
@@ -39,6 +58,7 @@ export function Toolbar({
         className="hidden"
         onChange={onImportNotebook}
       />
+      
       <Button
         variant="secondary"
         size="sm"
