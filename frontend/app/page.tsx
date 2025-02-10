@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { backendService } from "@/lib/execute";
 import Preview from "@/components/notebook/preview";
 import axios from "axios";
+import { resolve } from "node:path";
 
 // Database configuration
 const DB_NAME = "NotebookDB";
@@ -241,7 +242,8 @@ export default function Home() {
     };
   
     try {
-      const preview: ExecutionResponse = await backendService(JSON.stringify(ipynb), "testbook");
+      const preview: ExecutionResponse = await backendService(JSON.stringify(ipynb), uuidv4());
+      await new Promise((resolve) => setTimeout(resolve, 3000)); 
       setPreviewUrl(preview.url);
   
       // Poll for status
