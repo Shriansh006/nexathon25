@@ -44,7 +44,7 @@ const AiButton = () => {
     const handleScroll = () => {
       if (chatRef.current) {
         const { scrollTop, scrollHeight, clientHeight } = chatRef.current;
-        isUserScrolling.current = scrollHeight - scrollTop > clientHeight + 50; // User is scrolling up
+        isUserScrolling.current = scrollHeight - scrollTop > clientHeight + 50;
       }
     };
 
@@ -74,7 +74,7 @@ const AiButton = () => {
       setIsTyping(true);
       const systemPrompt = `This AI is a Manim AI, specialized in generating Manim animations. It does not support other programming languages. \n\nUser: ${input}`;
       const aiResponse = await getAIResponse(systemPrompt);
-      const cleanedResponse = aiResponse.replace(/<\/?.*?>/g, "").trim();
+      const cleanedResponse = aiResponse.replace(/<\/?[a-z][^>]*>/g, "").trim();
       const extractedManimCode = generateManimCode(cleanedResponse);
       const finalResponse = extractedManimCode.startsWith("Error") ? cleanedResponse : extractedManimCode;
       const isCodeResponse = finalResponse.includes("\n");
@@ -160,7 +160,7 @@ const AiButton = () => {
               className="bg-gray-800 border-gray-700 placeholder:text-gray-400 flex-1"
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); handleSendMessage(); } }}
+              onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey && !isTyping) { e.preventDefault(); handleSendMessage(); } }}
             />
           </div>
         </div>
