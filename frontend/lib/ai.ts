@@ -1,13 +1,13 @@
 import { Groq } from "groq-sdk";
 import "dotenv/config"; 
 
-const API_KEY = process.env.GROQ_API_KEY;
+const API_KEY = process.env.NEXT_PUBLIC_GROQ_API_KEY;
 
 if (!API_KEY) {
     throw new Error("Missing API Key. Set GROQ_API_KEY in .env file.");
 }
 
-const groq = new Groq({ apiKey: API_KEY });
+const groq = new Groq({ apiKey: API_KEY, dangerouslyAllowBrowser: true });
 
 export async function getAIResponse(userInput: string): Promise<string> {
     try {
