@@ -57,13 +57,13 @@ export function Cell({
           )}
         </div>
         <div className="flex items-center gap-1 mr-4">
-          <Button
+          {/* <Button
             variant="ghost"
             size="icon"
             className="h-6 w-6 bg-gray-800 text-green-400 hover:text-green-300 hover:bg-gray-700"
           >
             <Play className="h-4 w-4" />
-          </Button>
+          </Button> */}
           <Button
             variant="ghost"
             size="icon"
