@@ -228,16 +228,29 @@ export default function Home() {
                 />
                 <div className="h-1 group relative">
                   <div className="absolute inset-x-0 -top-2 h-4 opacity-0 group-hover:opacity-100 transition-opacity flex items-center">
-                    <div className="w-full h-px bg-gray-700" />
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => addCell("code", index)}
-                      className="absolute left-1/2 -translate-x-1/2 -translate-y-1/2 h-6 min-w-[80px] bg-gray-800 text-gray-400 hover:text-white hover:bg-gray-700 rounded-full text-xs"
-                    >
-                      <Plus className="w-3 h-3 mr-1" />
-                      Add Cell
-                    </Button>
+                    <div className="w-full flex h-px bg-gray-700" />
+                    <div className="absolute left-1/2 -translate-x-1/2 -translate-y-1/2 space-x-2">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => addCell("code", index)}
+                          className="h-6 min-w-[80px] bg-gray-800 text-gray-400 hover:text-white hover:bg-gray-700 rounded-full text-xs"
+                        >
+                          <Plus className="w-3 h-3 mr-1" />
+                          Add Code
+                        </Button>
+
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => addCell("markdown", index)}
+                          className="h-6 min-w-[80px] bg-gray-800 text-gray-400 hover:text-white hover:bg-gray-700 rounded-full text-xs"
+                        >
+                          <Plus className="w-3 h-3 mr-1" />
+                          Add Markdown
+                        </Button>
+                    </div>
+                    
                   </div>
                 </div>
               </div>
