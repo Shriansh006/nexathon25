@@ -3,7 +3,8 @@
 import { Button } from "@/components/ui/button";
 import { Plus, FileJson, Download, CogIcon } from "lucide-react";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
+import { Input } from "../ui/input";
 
 interface ToolbarProps {
   onAddCodeCell: () => void;
@@ -11,6 +12,8 @@ interface ToolbarProps {
   onImportNotebook: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onExportNotebook: () => void;
   onExecute: ()=>void;
+  fileName: string;
+  setFileName: Dispatch<SetStateAction<string>>;
   executing: boolean;
 }
 
@@ -20,15 +23,50 @@ export function Toolbar({
   onImportNotebook,
   onExportNotebook,
   onExecute,
-  executing
+  executing,
+  fileName,
+  setFileName
 }: ToolbarProps) {
+
+  const [isEditing, setIsEditing] = useState(false); // To toggle between input and span
+
+  const handleBlur = () => {
+    setIsEditing(false); // Switch back to span on blur
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter") {
+      setIsEditing(false); // Switch back to span on pressing Enter
+    }
+  };
 
 
   return (
     <div className="flex items-center gap-2 p-4 border-b border-gray-700 bg-gray-900">
       <div className="flex items-center mr-8">
-        <Image alt="logo" src="/logo.png" className="h-10" height={50} width={80}/>
-        <span className="text-2xl font-extrabold">IDE</span>
+        <div className="flex flex-col items-center">
+          <Image alt="logo" src="/logo.png" className="h-10" height={50} width={80}/>
+          <span className="text-sm font-extrabold">IDE</span>
+        </div>
+          {isEditing ? (
+            <Input
+              type="text"
+              placeholder="Filename"
+              value={fileName}
+              onChange={(e) => setFileName(e.target.value)}
+              onBlur={handleBlur}
+              onKeyDown={handleKeyDown}
+              className="bg-gray-800 border-gray-700 ring-gray-700 focus-visible:ring-offset-0 text-sm placeholder:text-gray-400 flex-1"
+              autoFocus
+            />
+          ) : (
+            <span
+              className="text-base font-semibold cursor-pointer truncate w-24"
+              onClick={() => setIsEditing(true)}
+            >
+              {fileName}
+            </span>
+          )}
       </div>
       <Button onClick={onAddCodeCell} variant="secondary" size="sm" className="bg-gray-800 text-gray-300 hover:text-white hover:bg-gray-700 border-0">
         <Plus className="w-4 h-4 mr-2" />

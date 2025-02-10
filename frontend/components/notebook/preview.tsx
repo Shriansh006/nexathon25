@@ -1,4 +1,4 @@
-import React, { IframeHTMLAttributes } from 'react'
+import React from 'react'
 
 interface PreviewProps {
     previewUrl : string;

@@ -32,6 +32,7 @@ export default function Home() {
 
   const [previewUrl , setPreviewUrl] = useState("");
   const [executing , setExecuting] = useState(false);
+  const [fileName, setFileName] = useState("chapter.mbc");
   const frameRef = useRef<HTMLIFrameElement>(null);
 
   const notebookRef = useRef<Notebook>({
@@ -205,7 +206,7 @@ export default function Home() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = "notebook.ipynb";
+    a.download = fileName?fileName:"notebook.ipynb";
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -286,6 +287,8 @@ export default function Home() {
         onExportNotebook={exportNotebook}
         onExecute={executeNotebook}
         executing={executing}
+        fileName={fileName}
+        setFileName={setFileName}
       />
       <div className="grid grid-cols-2">
         <div className="p-4 overflow-y-auto max-h-[calc(100vh-64px)]">
