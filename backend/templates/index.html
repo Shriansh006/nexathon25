@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<script>window.texme = {style: 'none'}</script>
+<script>
+    function setZoom(zoom) {
+        el = document.querySelector('main')
+        el = el || instance.getContainer();
+        var p = ["webkit", "moz", "ms", "o"],
+            s = "scale(" + zoom + ")"
+        for (var i = 0; i < p.length; i++) {
+            el.style[p[i] + "Transform"] = s;
+        }
+        el.style["transform"] = s;
+    }
+    zoom = 1;
+    function zoomin() {
+        zoom = zoom + 0.05;
+        setZoom(zoom);
+    }
+    function zoomout() {
+        zoom = zoom - 0.05;
+        setZoom(zoom);
+    }
+    function reset() {
+        zoom = 1;
+        setZoom(zoom);
+    }
+
+    window.texme.onRenderPage = () => {
+        function sendMouseData(e) {
+            data = {
+                type: "mouse",
+                pageX: e.pageX,
+                pageY: e.pageY,
+            }
+            window.parent.postMessage(JSON.stringify(data), '*')
+        }
+        window.addEventListener('message', function (e) {
+            data = JSON.parse(e.data);
+            if (data.type == 'zoom') {
+                data.value === "in" ? zoomin() : data.value === "out" ? zoomout() : reset();
+            }
+        })
+        window.addEventListener("mousemove", sendMouseData)
+        window.addEventListener("touchmove", sendMouseData)
+        const preTags = document.querySelectorAll('pre');
+        preTags.forEach(pre => {
+            pre.remove();
+        });
+        document.querySelectorAll("video").forEach(async (video) => {
+            document.querySelectorAll("video").forEach(async (video) => {
+                function openFullscreen(elem) {
+                    if (elem.requestFullscreen) {
+                        elem.requestFullscreen();
+                    } else if (elem.webkitRequestFullscreen) { /* Safari */
+                        elem.webkitRequestFullscreen();
+                    } else if (elem.msRequestFullscreen) { /* IE11 */
+                        elem.msRequestFullscreen();
+                    }
+                }
+                video.addEventListener("dblclick", () => openFullscreen(video));
+                video.addEventListener("click", () => video.play());
+                video.autoplay = true;
+                video.controls = false;
+                video.loop = true;
+                video.muted = true;
+                await video.play();
+            });
+        }, false);
+    }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/texme@1.2.0"></script>
+<style>
+    body {
+        color: #fff;
+        background: #444;
+        line-height: 1.5;
+        font-family: Verdana, Geneva, Tahoma, sans-serif
+    }
+
+    main {
+        max-width: 50em;
+        background: #111;
+        padding: 2em 3em;
+        margin-left: auto;
+        margin-right: auto;
+        border-radius: 0.5em;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    h7 {
+        margin: 1em 0 0.5em 0;
+        line-height: 1.2;
+    }
+
+    img {
+        max-width: 100%;
+    }
+
+    pre,
+    code,
+    samp,
+    kbd {
+        color: #0cc73b;
+        font-family: monospace, monospace;
+    }
+
+    pre,
+    blockquote {
+        background: #262626;
+        padding: 0.5em;
+    }
+
+    pre {
+        overflow: auto;
+        white-space: pre;
+        overflow-x: auto;
+        line-height: normal;
+        font-family: Menlo, 'DejaVu Sans Mono', consolas, 'Courier New', monospace;
+    }
+
+    blockquote {
+        border-left: medium solid #ccc;
+        margin: 1em 0;
+    }
+
+    blockquote :first-child {
+        margin-top: 0;
+    }
+
+    blockquote :last-child {
+        margin-bottom: 0;
+    }
+
+    table {
+        border-collapse: collapse;
+    }
+
+    th,
+    td {
+        border: thin solid #999;
+        padding: 0.3em 0.4em;
+        text-align: left;
+    }
+
+    .zoom {
+        display: none;
+        z-index: 20;
+    }
+
+    .white {
+        fill: rgb(255, 255, 255)
+    }
+
+
+    @media screen and (min-width: 40em) {
+        body {
+            background: #333;
+            padding: 0;
+            margin: 0;
+        }
+
+        .zoom {
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            bottom: 3%;
+            left: 3%;
+            justify-content: center;
+        }
+
+        .zoom .buttons {
+            display: flex;
+            flex-direction: column;
+            background: #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            height: 4em;
+            width: 4em;
+            border: none;
+            background-color: transparent;
+        }
+
+        .buttons svg {
+            height: 1.5em;
+            width: 1.5em;
+        }
+
+        button:hover {
+            background-color: #333;
+            transition: 1s;
+            color: #fff
+        }
+
+        main {
+            background-color: #111;
+            padding: 5em 6em;
+            transform-origin: top center;
+            margin: 1em auto;
+            /* box-shadow: 0.4em 0.4em 0.4em #222; */
+        }
+    }
+</style>
+
+<textarea>
