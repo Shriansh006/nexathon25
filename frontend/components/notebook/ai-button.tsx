@@ -11,10 +11,9 @@ import {
 import { Button } from "../ui/button";
 import { BrainIcon, Clipboard } from "lucide-react";
 import { Textarea } from "../ui/textarea";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { getAIResponse } from "@/lib/ai";
 import { generateManimCode } from "@/lib/manim-generator";
-import { cn } from "@/lib/utils";
 
 type ChatItem = {
   user: { question: string };
@@ -26,6 +25,8 @@ const AiButton = () => {
   const [chat, setChat] = useState<ChatItem[]>([]);
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
+  const chatRef = useRef<HTMLDivElement>(null);
+  const isUserScrolling = useRef(false);
 
   useEffect(() => {
     const storedChat = localStorage.getItem("ai-chat");
@@ -36,6 +37,12 @@ const AiButton = () => {
 
   useEffect(() => {
     localStorage.setItem("ai-chat", JSON.stringify(chat));
+  }, [chat]);
+
+  useEffect(() => {
+    if (chatRef.current && !isUserScrolling.current) {
+      chatRef.current.scrollTop = chatRef.current.scrollHeight;
+    }
   }, [chat]);
 
   const handleSendMessage = async () => {
@@ -94,6 +101,13 @@ const AiButton = () => {
     }
   };
 
+  const handleScroll = () => {
+    if (chatRef.current) {
+      const isAtBottom = chatRef.current.scrollHeight - chatRef.current.scrollTop <= chatRef.current.clientHeight + 10;
+      isUserScrolling.current = !isAtBottom;
+    }
+  };
+
   return (
     <Sheet>
       <SheetTrigger>
@@ -117,17 +131,21 @@ const AiButton = () => {
         </SheetHeader>
 
         <div className="flex flex-col w-full h-full justify-end pb-20 relative">
-          <div className="h-full w-full flex flex-col space-y-2 overflow-y-scroll">
+          <div
+            ref={chatRef}
+            onScroll={handleScroll}
+            className="h-full w-full flex flex-col space-y-4 overflow-auto overflow-y-scroll"
+          >
             {chat.map((v, index) => (
               <div key={index} className="flex flex-col w-full">
                 <div className="self-end px-4 py-2 bg-gray-700 rounded-lg">{v.user.question}</div>
 
                 {!v.isCode ? (
-                  <div className="self-start px-4 py-2 bg-gray-800 rounded-lg whitespace-pre-wrap">
+                  <div className="self-start px-4 py-2 bg-gray-800 rounded-lg whitespace-pre-wrap mt-2">
                     {v.ai.answer}
                   </div>
                 ) : (
-                  <div className="relative self-start w-full bg-gray-800 rounded-lg p-4">
+                  <div className="relative self-start w-full bg-gray-800 rounded-lg p-4 mt-2">
                     <pre className="overflow-x-auto text-sm text-gray-300 whitespace-pre-wrap">
                       {v.ai.answer}
                     </pre>
