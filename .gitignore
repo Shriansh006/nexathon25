@@ -1,0 +1,4 @@
+backend/.venv/
+backend/data/
+backend/test/
+backend/__pycache_/
