@@ -14,7 +14,8 @@ app = FastAPI()
 
 OUTPUT_DIR = Path(getenv("DATA_DIR", "data/renders"))
 PUBLIC_URL = getenv("PUBLIC_URL", "http://localhost:8000")
-makedirs(OUTPUT_DIR)
+if not path.isdir(OUTPUT_DIR):
+    makedirs(OUTPUT_DIR)
 
 @app.get("/")
 async def root():
