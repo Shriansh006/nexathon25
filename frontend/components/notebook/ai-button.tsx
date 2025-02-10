@@ -41,8 +41,25 @@ const AiButton = () => {
   }, [chat]);
 
   useEffect(() => {
-    if (chatRef.current && !isUserScrolling.current) {
-      chatRef.current.scrollTop = chatRef.current.scrollHeight;
+    const handleScroll = () => {
+      if (chatRef.current) {
+        const { scrollTop, scrollHeight, clientHeight } = chatRef.current;
+        isUserScrolling.current = scrollHeight - scrollTop > clientHeight + 50; // User is scrolling up
+      }
+    };
+
+    chatRef.current?.addEventListener("scroll", handleScroll);
+    return () => chatRef.current?.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    if (chatRef.current) {
+      const { scrollTop, scrollHeight, clientHeight } = chatRef.current;
+      const isNearBottom = scrollHeight - scrollTop <= clientHeight + 50;
+
+      if (isNearBottom) {
+        chatRef.current.scrollTo({ top: scrollHeight, behavior: "smooth" });
+      }
     }
   }, [chat]);
 
@@ -115,16 +132,13 @@ const AiButton = () => {
         </SheetHeader>
 
         <div className="flex flex-col w-full h-full justify-end pb-20 relative">
-          <div ref={chatRef} className="h-full w-full flex flex-col space-y-4 overflow-auto" >
+          <div ref={chatRef} className="h-full w-full flex flex-col space-y-4 overflow-auto">
             {chat.map((v, index) => (
               <div key={index} className="flex flex-col w-full">
                 <div className="self-end px-4 py-2 bg-gray-700 rounded-lg">{v.user.question}</div>
-
                 {v.isCode ? (
                   <div className="relative self-start w-full bg-gray-800 rounded-lg p-4 mt-2">
-                    <pre className="overflow-x-auto text-sm text-gray-300 whitespace-pre-wrap">
-                      {v.ai.answer}
-                    </pre>
+                    <pre className="overflow-x-auto text-sm text-gray-300 whitespace-pre-wrap">{v.ai.answer}</pre>
                     <Button
                       onClick={() => copyToClipboard(v.ai.answer, index)}
                       size="sm"
@@ -134,9 +148,7 @@ const AiButton = () => {
                     </Button>
                   </div>
                 ) : (
-                  <div className="self-start px-4 py-2 bg-gray-800 rounded-lg whitespace-pre-wrap mt-2">
-                    {v.ai.answer}
-                  </div>
+                  <div className="self-start px-4 py-2 bg-gray-800 rounded-lg whitespace-pre-wrap mt-2">{v.ai.answer}</div>
                 )}
               </div>
             ))}
