@@ -1,0 +1,26 @@
+import { Groq } from "groq-sdk";
+import "dotenv/config"; 
+
+const API_KEY = process.env.GROQ_API_KEY;
+
+if (!API_KEY) {
+    throw new Error("Missing API Key. Set GROQ_API_KEY in .env file.");
+}
+
+const groq = new Groq({ apiKey: API_KEY });
+
+export async function getAIResponse(userInput: string): Promise<string> {
+    try {
+        const response = await groq.chat.completions.create({
+            model: "deepseek-r1-distill-llama-70b", 
+            messages: [{ role: "user", content: userInput }],
+            temperature: 0.6,
+            max_tokens: 4096,
+            top_p: 0.95,
+        });
+
+        return response.choices?.[0]?.message?.content || "Error: No response from AI";
+    } catch (error) {
+        throw new Error(`Groq API Error: ${error}`);
+    }
+}
