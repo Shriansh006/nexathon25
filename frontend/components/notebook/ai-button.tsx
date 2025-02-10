@@ -110,7 +110,7 @@ const AiButton = () => {
             <BrainIcon className="mr-2" /> Animate with AI
           </SheetTitle>
           <SheetDescription>
-            This AI is specifically designed for Manim animations. It does not support any other coding language.
+            This AI is specifically designed for Manim animations.
           </SheetDescription>
         </SheetHeader>
 
@@ -144,7 +144,7 @@ const AiButton = () => {
 
           <div className="flex mt-4 space-x-2">
             <Textarea
-              placeholder="Ask AI (Manim code only)"
+              placeholder="Ask AI"
               className="bg-gray-800 border-gray-700 placeholder:text-gray-400 flex-1"
               value={input}
               onChange={(e) => setInput(e.target.value)}
