@@ -54,6 +54,7 @@
     "date-fns": "^3.6.0",
     "dotenv": "^16.4.7",
     "embla-carousel-react": "^8.3.0",
+    "encoding": "^0.1.13",
     "eslint": "8.49.0",
     "eslint-config-next": "13.5.1",
     "groq-sdk": "^0.15.0",
