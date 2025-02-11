@@ -81,3 +81,42 @@
     @apply bg-background text-foreground;
   }
 }
+
+@layer utilities {
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-20px);
+    }
+    100% {
+      transform: translateY(0px);
+    }
+  }
+
+  .fancy-border {
+    @apply relative;
+  }
+
+  .fancy-border::before {
+    content: "";
+    @apply absolute -inset-0.5 bg-gradient-to-r from-primary to-accent opacity-75 blur;
+  }
+
+  .animate-blob {
+    animation: blob 7s infinite;
+  }
+
+  .animation-delay-2000 {
+    animation-delay: 2s;
+  }
+
+  .animation-delay-4000 {
+    animation-delay: 4s;
+  }
+}
