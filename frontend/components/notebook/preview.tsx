@@ -44,7 +44,7 @@ const Preview = ({ previewUrl, frameRef, executing , error }: PreviewProps) => {
           <span className="text-center font-semibold">Preview</span>
         </div>
       ) : (
-        error && error != "done\n" ? <div className="h-full w-full p-4 space-y-4">
+        error && error != "done\n" ? <div className="h-full w-full p-4 space-y-4 max-h-full overflow-y-auto">
           <div className="flex flex-col">
             <span className='text-red-600 text-2xl'>{`ManimBooks::CompileError <0x0${generateRandom4DigitNumber()}>`}</span>
             <span className='text-xs text-gray-400'>The detailed error will be displayed below. Re execute after fixing the errors! </span>

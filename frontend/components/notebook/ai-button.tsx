@@ -72,7 +72,22 @@ const AiButton = () => {
 
     try {
       setIsTyping(true);
-      const systemPrompt = `This AI is a Manim AI, specialized in generating Manim animations. It does not support other programming languages. \n\nUser: ${input}`;
+      const systemPrompt = `Only write manim (python library) code. if someone ask other thing tell them you're here only for manim animation codes. also when you write manim code use this format for your reference.also animate text which shows required info for the animations
+      
+      %%manim -qm CircleToSquare
+
+      class CircleToSquare(Scene):
+          def construct(self):
+              blue_circle = Circle(color=BLUE, fill_opacity=0.5)
+              green_square = Square(color=GREEN, fill_opacity=0.8)
+              self.play(Create(blue_circle))
+              self.wait()
+              
+              self.play(Transform(blue_circle, green_square))
+              self.wait() 
+
+
+      \n\nUser: ${input}`;
       const aiResponse = await getAIResponse(systemPrompt);
       const cleanedResponse = aiResponse.replace(/<\/?[a-z][^>]*>/g, "").trim();
       const extractedManimCode = generateManimCode(cleanedResponse);

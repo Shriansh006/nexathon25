@@ -12,7 +12,7 @@ const groq = new Groq({ apiKey: API_KEY, dangerouslyAllowBrowser: true });
 export async function getAIResponse(userInput: string): Promise<string> {
     try {
         const response = await groq.chat.completions.create({
-            model: "deepseek-r1-distill-llama-70b", 
+            model: "llama-3.3-70b-specdec", 
             messages: [{ role: "user", content: userInput }],
             temperature: 0.6,
             max_tokens: 4096,
