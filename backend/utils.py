@@ -2,7 +2,7 @@ from pathlib import Path
 
 import nbformat
 from nbconvert import MarkdownExporter
-from nbconvert.preprocessors import ExecutePreprocessor
+from nbconvert.preprocessors import CellExecutionError, ExecutePreprocessor
 from nbconvert.writers.files import FilesWriter
 
 
@@ -31,8 +31,13 @@ def export_notebook_as_html(contents, output_file, output_dir):
         f.write(pretext)
         f.write(body)
 
-    ep = ExecutePreprocessor(timeout=1800, kernel_name="python3")
-    ep.preprocess(notebook_content, {"metadata": {"path": output_dir}})
+    try:
+        ep = ExecutePreprocessor(timeout=1800, kernel_name="python3")
+        ep.preprocess(notebook_content, {"metadata": {"path": output_dir}})
+    except CellExecutionError as e:
+        with open(Path(output_dir) / "success.txt", "w") as f:
+            f.write(e.__str__())
+        return
 
     (body, resources) = exporter.from_notebook_node(notebook_content)
 
@@ -48,11 +53,3 @@ def export_notebook_as_html(contents, output_file, output_dir):
 
     with open(Path(output_dir) / "success.txt", "w") as f:
         f.write("done\n")
-
-    print(f"Notebook has been successfully exported as Markdown to {output_file}")
-    print(f"Output media files have been saved to {output_dir}")
-
-
-notebook_path = "/home/kush/mbook-backend/test.ipynb"
-output_file = "index.html"
-output_dir = "/home/kush/mbook-backend/op"
