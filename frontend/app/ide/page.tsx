@@ -338,7 +338,7 @@ export default function Home() {
           </div>
         </div>
         <div className="bg-gray-900 border-l border-gray-700 h-[calc(100vh-74px)] sticky top-[64px]">
-          <Preview previewUrl={previewUrl} frameRef={frameRef} />
+          <Preview previewUrl={previewUrl} frameRef={frameRef} executing={executing} />
         </div>
       </div>
     </div>
