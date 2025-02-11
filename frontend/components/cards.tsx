@@ -17,16 +17,16 @@ export function Cards() {
   return (
     <div className="grid grid-cols-3 gap-8 w-3/4 m-auto">
       {cardData.map((card, index) => (
-        <div key={index} className="fancy-border rounded-xl overflow-hidden">
-          <Card className="relative z-10 bg-orange-500 text-card-foreground p-6 h-full aspect-[1/1] min-h-[50px] min-w-[50px] flex flex-col justify-between transition-transform duration-300 hover:scale-105 ">
-            <CardHeader >
-              <CardTitle className="text-primary text-black text-2xl">{card.title}</CardTitle>
+        <div key={index} className="rounded-xl overflow-hidden">
+          <Card className="border-0 relative z-10 bg-orange-500 text-card-foreground p-6 h-full aspect-[1/1] min-h-[50px] min-w-[50px] flex flex-col justify-between transition-transform duration-300 hover:scale-105 ">
+            <CardHeader>
+              <CardTitle className="text-primary text-gray-800 text-2xl">{card.title}</CardTitle>
             </CardHeader>
             <CardContent >
-              <CardDescription className="text-muted-foreground text-white text-xl">{card.description}</CardDescription>
+              <CardDescription className="text-muted-foreground text-gray-200 text-xl">{card.description}</CardDescription>
             </CardContent>
             <CardFooter >
-              <Button variant="outline" className="w-full text-xl py-1 px-2 hover:bg-primary hover:text-primary-foreground bg-purple-300">
+              <Button variant="outline" className="w-full text-xl py-1 px-2 hover:bg-primary border-0 hover:text-primary-foreground bg-yellow-100">
                 Learn More
               </Button>
             </CardFooter>

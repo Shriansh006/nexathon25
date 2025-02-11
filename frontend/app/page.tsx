@@ -3,6 +3,7 @@ import { Cards } from "@/components/cards"
 import { ImageSection } from "@/components/image-section"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
+import Image from "next/image"
 
 export default function Home() {
   return (
@@ -30,12 +31,12 @@ export default function Home() {
                 </Link>
                 
               </div>
+              <Image src="/preview.png" alt="preview" height={1024} width={1024} className="w-2/3 mt-20" />
             </div>
           </div>
-        </section>
 
-        {/* Image Section */}
-        <ImageSection />
+
+        </section>
 
         {/* Cards Section */}
         <section className="py-24 min-h-screen">

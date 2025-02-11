@@ -7,7 +7,7 @@ export function ImageSection() {
         <div className="relative fancy-border rounded-xl overflow-hidden">
           <div className="relative z-10 bg-card p-1 rounded-xl overflow-hidden">
             <Image
-              src="/placeholder.svg?height=600&width=1200"
+              src="/preview.png"
               alt="manimBook Showcase"
               width={1200}
               height={600}
