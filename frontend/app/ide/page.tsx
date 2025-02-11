@@ -12,6 +12,7 @@ import { backendService } from "@/lib/execute";
 import Preview from "@/components/notebook/preview";
 import axios from "axios";
 import { resolve } from "node:path";
+import toast from "react-hot-toast";
 
 // Database configuration
 const DB_NAME = "NotebookDB";
@@ -82,16 +83,49 @@ export default function Home() {
         switch (e.key.toLowerCase()) {
           case "s":
             e.preventDefault();
+            toast('Saved',
+              {
+                icon: '✅',
+                style: {
+                  borderRadius: '10px',
+                  background: '#282c34',
+                  color: '#fff',
+                },
+              }
+            );
             saveNotebook();
             break;
           case "b":
             e.preventDefault();
+            toast('Created code block',
+              {
+                icon: '🤖',
+                style: {
+                  borderRadius: '10px',
+                  background: '#282c34',
+                  color: '#fff',
+                },
+              }
+            );
             addCell("code");
             break;
           case "m":
             e.preventDefault();
+            toast('Created markdown block',
+              {
+                icon: '🪄',
+                style: {
+                  borderRadius: '10px',
+                  background: '#282c34',
+                  color: '#fff',
+                },
+              }
+            );
             addCell("markdown");
             break;
+          case "/":
+            e.preventDefault();
+            document.getElementById("ai-btn")?.click();
         }
       }
     };

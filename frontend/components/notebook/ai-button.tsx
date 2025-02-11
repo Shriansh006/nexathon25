@@ -131,7 +131,7 @@ const AiButton = () => {
   return (
     <Sheet>
       <SheetTrigger>
-        <Button variant="ghost" size="sm" className="w-fit mt-1 py-1 text-xs text-gray-400 hover:text-white bg-gray-800/50 hover:bg-gray-800">
+        <Button id="ai-btn" variant="ghost" size="sm" className="w-fit mt-1 py-1 text-xs text-gray-400 hover:text-white bg-gray-800/50 hover:bg-gray-800">
           <BrainIcon size={15} className="mr-1" />
           Write with AI
         </Button>
