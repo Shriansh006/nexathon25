@@ -1,12 +1,15 @@
+import { cleanErrorOutput, generateRandom4DigitNumber } from '@/lib/utils';
+import ReactCodeMirror from '@uiw/react-codemirror';
 import React, { useEffect, useState } from 'react';
 
 interface PreviewProps {
   previewUrl: string;
   frameRef: React.MutableRefObject<HTMLIFrameElement | null>;
   executing: boolean;
+  error: string;
 }
 
-const Preview = ({ previewUrl, frameRef, executing }: PreviewProps) => {
+const Preview = ({ previewUrl, frameRef, executing , error }: PreviewProps) => {
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
@@ -41,6 +44,22 @@ const Preview = ({ previewUrl, frameRef, executing }: PreviewProps) => {
           <span className="text-center font-semibold">Preview</span>
         </div>
       ) : (
+        error ? <div className="h-full w-full p-4 space-y-4">
+          <div className="flex flex-col">
+            <span className='text-red-600 text-2xl'>{`ManimBooks::CompileError <0x0${generateRandom4DigitNumber()}>`}</span>
+            <span className='text-xs text-gray-400'>The detailed error will be displayed below. Re execute after fixing the errors! </span>
+          </div>
+          <ReactCodeMirror
+            value={cleanErrorOutput(error)}
+            height="auto"
+            theme="dark"
+            className="border-none"
+            editable={false}
+            basicSetup={{
+              lineNumbers : false
+            }}
+          />
+        </div> : 
         <iframe ref={frameRef} className="w-full h-full" src={previewUrl}></iframe>
       )}
     </div>

@@ -34,6 +34,7 @@ export default function Home() {
   const [previewUrl , setPreviewUrl] = useState("");
   const [executing , setExecuting] = useState(false);
   const [fileName, setFileName] = useState("chapter.mbc");
+  const [error , setError] = useState("");
   const frameRef = useRef<HTMLIFrameElement>(null);
 
   const notebookRef = useRef<Notebook>({
@@ -253,6 +254,9 @@ export default function Home() {
             try{
               const response = await axios.post("/api/success", { previewUrl: url });
               if (response.status === 200) {
+                if(!response.data.done){
+                  setError(response.data.error);
+                }
                 break;
               }
             }
@@ -338,7 +342,7 @@ export default function Home() {
           </div>
         </div>
         <div className="bg-gray-900 border-l border-gray-700 h-[calc(100vh-74px)] sticky top-[64px]">
-          <Preview previewUrl={previewUrl} frameRef={frameRef} executing={executing} />
+          <Preview previewUrl={previewUrl} frameRef={frameRef} executing={executing} error={error} />
         </div>
       </div>
     </div>
