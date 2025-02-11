@@ -92,7 +92,7 @@ export function Toolbar({
       <input
         type="file"
         id="notebook-import"
-        accept=".ipynb"
+        accept=".ipynb,.mbc"
         className="hidden"
         onChange={onImportNotebook}
       />

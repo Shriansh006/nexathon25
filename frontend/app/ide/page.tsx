@@ -219,6 +219,7 @@ export default function Home() {
 
   const executeNotebook = useCallback(async () => {
     setExecuting(true);
+    setError("");
     const ipynb = {
       cells: notebookRef.current.cells.map((cell) => {
         const format: CellContent = {

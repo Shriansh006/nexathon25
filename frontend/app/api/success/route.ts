@@ -7,7 +7,7 @@ export async function POST(req : NextRequest){
     try{
         const response = await axios.get(`${previewUrl.substring(0,previewUrl.lastIndexOf("/"))}/success.txt`);
         const content = response.data;
-        if(content === "done"){
+        if(content === "done\n"){
             return NextResponse.json({done : true} , {status : 200});
         }
 
